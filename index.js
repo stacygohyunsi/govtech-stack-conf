@@ -1,12 +1,12 @@
 const express = require('express');
 const jwt = require('jsonwebtoken');
 const cookieParser = require('cookie-parser');
+const bodyParser = require('body-parser');
 const tokenConfig = require('./config');
 const uuidv4 = require('uuid/v4');
 const uuidv1 = require('uuid/v1');
 const crypto = require('crypto');
-const moment = require('moment');
-const bodyParser = require('body-parser');
+const utils = require('./utils');
 
 let app = express();
 
@@ -14,19 +14,14 @@ app.use(cookieParser());
 app.use(bodyParser());
 
 app.get('/', function (req, res) {
-    res.send('Hello World');
+    res.send('Hello ladies and gentlemen, welcome to a mock up of this cool token playground');
 });
 
-app.get('/sign', function (req, res) {
-    generateMobileAccessToken(1);
-    res.send('Hello World');
+app.get('/uponlogin', function (req, res) {
+    generateMobileAccessToken(1).then((tokens) => {
+        res.json(tokens);
+    })
 });
-
-function checkIsBeforeCurrentDate(dateValue) {
-    let dateToCheck = moment(dateValue).format('YYYY-MM-DD HH:mm');
-    let todaysDate = moment().format('YYYY-MM-DD HH:mm');
-    return (moment(dateToCheck).isBefore(todaysDate, 'second'));
-}
 
 function generateMobileRefreshToken(uuid, cryptoModule) {
     if (!cryptoModule) {
@@ -35,12 +30,6 @@ function generateMobileRefreshToken(uuid, cryptoModule) {
     let hash = cryptoModule.createHmac(tokenConfig.refreshTokenHashAlgorithm, tokenConfig.refreshTokenHashKey)
     hash.update(uuid);
     return hash.digest('hex');
-}
-
-function generateNewDatePlusUTCMinutesFromNow(minutesToAdd) {
-    let current = new Date();
-    current.setMinutes(current.getMinutes() + minutesToAdd);
-    return current;
 }
 
 function generateMobileAccessToken(userId) {
@@ -56,54 +45,59 @@ function generateMobileAccessToken(userId) {
             expiresIn: (tokenConfig.mobileToken.accessTokenExpiresInMins * 60)
         }
     };
-
-    console.log(newAccessToken);
-
-    jwt.sign(newAccessToken.payload, newAccessToken.digitalSigningSecret, newAccessToken.options, (err, accessToken) => {
-        if (err) {
-            console.log(err);
-        }
-        console.log(accessToken);
-        let refreshToken;
-        try {
-            refreshToken = generateMobileRefreshToken(uuidv4(), crypto);
-        } catch (err) {
-            console.log(err);
-        }
-        console.log(refreshToken);
-        const accessTokenExpiry = generateNewDatePlusUTCMinutesFromNow(tokenConfig.mobileToken.accessTokenExpiresInMins);
-        const refreshTokenExpiry = generateNewDatePlusUTCMinutesFromNow(tokenConfig.mobileToken.refreshTokenExpiresInMins);
-        const newTokenRecord = {
-            tokenId: newAccessToken.options.jwtid,
-            accessTokenType: 'mobile',
-            accessToken,
-            accessTokenExpiry,
-            refreshToken,
-            refreshTokenExpiry,
-            userId,
-            isRevoked: false
-        }; 
-
-        console.log(newTokenRecord);
+    return new Promise((resolve, reject) => {
+        jwt.sign(newAccessToken.payload, newAccessToken.digitalSigningSecret, newAccessToken.options, (err, accessToken) => {
+            if (err) {
+                console.log(err);
+                reject(err);
+            }
+            let refreshToken;
+            try {
+                refreshToken = generateMobileRefreshToken(uuidv4(), crypto);
+            } catch (err) {
+                console.log(err);
+                reject(err);
+            }
+    
+            const accessTokenExpiry = utils.generateNewDatePlusUTCMinutesFromNow(tokenConfig.mobileToken.accessTokenExpiresInMins);
+            const refreshTokenExpiry = utils.generateNewDatePlusUTCMinutesFromNow(tokenConfig.mobileToken.refreshTokenExpiresInMins);
+            const newTokenRecord = {
+                tokenId: newAccessToken.options.jwtid,
+                accessToken,
+                accessTokenExpiry,
+                refreshToken,
+                refreshTokenExpiry,
+                userId,
+                isRevoked: false
+            }; 
+    
+            console.log(newTokenRecord);
+            resolve(newTokenRecord);
+        });
     });
 }
 
 app.post('/verify', function (req, res) {
-    // console.log(req.cookies.jwt);
-    console.log(req.body);
-    if (checkIsBeforeCurrentDate(req.body.refreshTokenExpiry)) {
-        console.log('direct to login page');
+    if (utils.checkIsBeforeCurrentDate(req.body.refreshTokenExpiry)) {
+        res.send('Your refresh token has expired! Direct to login page');
     } else {
-        console.log(checkIsBeforeCurrentDate(req.body.accessTokenExpiry));
-        if (checkIsBeforeCurrentDate(req.body.accessTokenExpiry)) {
-            generateMobileAccessToken(1);
+        if (utils.checkIsBeforeCurrentDate(req.body.accessTokenExpiry)) {
+            generateMobileAccessToken(1).then((accessTokens) => {
+                res.json(accessTokens);
+            });
         } else {
-            console.log('congrats you may proceed');
+            jwt.verify(req.body.accessToken, tokenConfig.digitalSigningSecret, function(err, decoded) {
+                if (err) {
+                    res.send('None of your tokens have expired but your JWT signature is invalid.');
+                } else {
+                    res.send('Congrats none of your tokens have expired and your JWT signature matches.');
+                }
+            });
+            
         }
     }
-    res.send('Hello World');
 });
- 
- app.listen(8081, function () {    
+
+app.listen(8081, function () {    
     console.log("Example app listening at 8081");
 });

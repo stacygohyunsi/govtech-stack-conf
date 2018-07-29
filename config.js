@@ -1,5 +1,5 @@
-const mobileTokenConfig = {
-    iss: 'pg.moe.edu.sg',
+const tokenConfig = {
+    iss: 'govtech',
     digitalSigningSecret: 'secret',
     algorithm: 'HS256',
     mobileToken: {
@@ -14,4 +14,4 @@ const mobileTokenConfig = {
     refreshTokenHashKey: 'somerefreshsecret'
   };
 
-module.exports = mobileTokenConfig;
+module.exports = tokenConfig;
