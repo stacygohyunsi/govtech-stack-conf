@@ -15,6 +15,7 @@ function createJwt() {
 		digitalSigningSecret: secrets.jwtSecret,
 		options: {
 			//Fill in for Exercise 2(a)
+			jwtid: uuidv1()
 		}
 	};
 	return accessToken;
