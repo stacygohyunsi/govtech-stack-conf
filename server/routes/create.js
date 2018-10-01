@@ -11,11 +11,17 @@ function createJwt() {
 	const accessToken = {
 		payload: {
 			//Fill in for Exercise 2(c)
+			iss: 'stackconf-auth-service',
+			aud: 'stackconf-api-service',
+			sub: 'yuhong',
+			type: 'vip-ticket'
 		},
 		digitalSigningSecret: secrets.jwtSecret,
 		options: {
 			//Fill in for Exercise 2(a)
-			jwtid: uuidv1()
+			jwtid: uuidv1(),
+			algorithm: 'HS384',
+			expiresIn: '1h'
 		}
 	};
 	return accessToken;
