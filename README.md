@@ -16,6 +16,10 @@ Make a GET call to the `/verifytoken` endpoint.
 
 You should get the error: `No Authorisation header with Bearer token found.`
 
+Should look like this:
+
+![todo step 1](images/todo-step-1.png)
+
 2. The server is expecting an authorisation header with a JWT. Get the jwt from `bit.ly/jwt-ex-1`
 
 3. Copy the JWT and add a Authorisation header: Bearer {JWT} to your request
