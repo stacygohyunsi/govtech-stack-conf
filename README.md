@@ -54,9 +54,10 @@ Sign your own jwt using this library (https://github.com/auth0/node-jsonwebtoken
 ![Diagram of JWT as session token](./ex-2.png)
 
 ## Setup
-- `git clone` this library
+- `git clone` this library (if you have not already done so)
 
 ### Setup Ticketing Machine Server
+- Open a terminal in the root folder
 - Restore dependencies with `npm install`
 - Run `npx nodemon` to start the ticketing machine server
 - The ticketing machine will be running on `http://localhost:9000/`
@@ -79,30 +80,43 @@ Help fix the broken ticketing machine for an amusement park.
 - Algorithm - HS384
 - expiresIn - 1 hour
 
-To find out how to add the options required, reference the readme of our JWT library used(https://github.com/auth0/node-jsonwebtoken).
+To find out how to add the options required, reference the readme of our JWT library used in the Usage section(https://github.com/auth0/node-jsonwebtoken#usage).
 
 This ensures that we are using HS384 algorithm to sign the JWT and that the JWT should expire in 1 hour.
 
 2. Start ticketing server (http://localhost:9000) and visit http://localhost:3000 to view create ticket page
 
-3. Click Create Ticket’ to generate a ticket. You should be able to see your ticket generated.
+3. Click `Create Ticket` to generate a ticket. You should be able to see your ticket generated.
 
-4. Test out your generated ticket against the amusement park gantry system. By clicking 'Insert Ticket into Gantry', We make an API request to `stack-conf-jwt.herokuapp.com/api/park/entries`.
+Like this:
+![Create Ticket](./images/ex2-step3.png)
 
-5. We should get an error which says that certain claims are missing. 
+![Create Ticket 3b](./images/ex2-step3b.png)
+
+4. Test out your generated ticket against the amusement park gantry system. By clicking 'Submit your token to gain entry!', We make an API request to `stack-conf-jwt.herokuapp.com/api/park/entries`.
+
+5. We should get an error which says that certain claims are missing.
+
+Like this:
+![Create Ticket 5](./images/ex2-step5.png)
+
 
 6. Fix it by configuring the correct claims in the code payload:
 
 - Issuer - 'stackconf-auth-service'
 - Audience - 'stackconf-api-service'
 - Subject - 'yourname'
-- Type: 'VIP ticket'
+- Type: 'vip-ticket'
 
-Once again, you may reference the readme of our JWT library used(https://github.com/auth0/node-jsonwebtoken), to figure out how to add registered claims.
+Once again, you may reference the readme of our JWT library used(https://github.com/auth0/node-jsonwebtoken#jwtverifytoken-secretorpublickey-options-callback), to figure out how to add registered claims.
+
+For e.g. realise that `issuer` needs to be `iss`
 
 *Hint: One of the claims is a private claim and require manual adding to token payload.*
 
-7. Click ‘Insert Ticket into Gantry’ to send your JWT token and gain entry to the amusement park.
+You may need to do a hard refresh on the page and repeat step 3 of `Create Ticket`
+
+7. Click `Submit your token to gain entry!` to send your JWT token and gain entry to the amusement park.
 
 ## Food for thought - Questions to think about:
 1. How do I use a private/public key pair instead of using HMAC? What would have to change?
