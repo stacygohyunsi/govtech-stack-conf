@@ -12,9 +12,9 @@ Make a GET call to the `/verifytoken` endpoint.
 - The server will be running on `http://localhost:9000/`
 
 ## Todo
-1. Use Postman (https://www.getpostman.com/) to make a GET request http://localhost:9000/verifytoken
+1. Use Postman (https://www.getpostman.com/) tested with v6.3.0 to make a GET request http://localhost:9000/verifytoken
 
-You should get the error: `No authorisation header found.`
+You should get the error: `No Authorisation header with Bearer token found.`
 
 2. The server is expecting an authorisation header with a JWT. Get the jwt from `bit.ly/jwt-ex-1`
 
