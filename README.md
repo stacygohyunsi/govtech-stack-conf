@@ -45,12 +45,12 @@ In this exercise, you will sign your own jwt using this library (https://github.
 ## Setup
 - `git clone` this library
 
-### Setup Ticketing Machine Server
+#### Setup Ticketing Machine Server
 - Restore dependencies with `npm install`
 - Run `npx nodemon` to start the ticketing machine server
 - The ticketing machine will be running on `http://localhost:9000/`
 
-### Setup Ticket Purchasing Interface
+#### Setup Ticket Purchasing Interface
 - Open a new terminal and `cd client`
 - Restore dependencies with `npm install`
 - Then run `npm start` to run the client interface
@@ -90,7 +90,7 @@ By clicking 'Insert Ticket into Gantry', We make an API request to `stack-conf-j
     - Subject - 'yourname'
     - Type: 'vip-ticket'
 
-    *Hint 1: Check out the [registered claims section of the open standards of JWT]([https://tools.ietf.org/html/rfc7519#section-4.1) on how to define a registered claim in your payload. Alternatively, you may also use the helpful signing options provided by the [JWT library](https://github.com/auth0/node-jsonwebtoken#jwtsignpayload-secretorprivatekey-options-callback) used in this exercise.*
+    *Hint 1: Check out the [registered claims section of the open standards of JWT](https://tools.ietf.org/html/rfc7519#section-4.1) on how to define a registered claim in your payload. Alternatively, you may also use the helpful signing options provided by the [JWT library](https://github.com/auth0/node-jsonwebtoken#jwtsignpayload-secretorprivatekey-options-callback) used in this exercise.*
 
     *Hint 2: One of the claims is a [private claim](https://tools.ietf.org/html/rfc7519#section-4.3) and require manual adding to token payload.*
 
