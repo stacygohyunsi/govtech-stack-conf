@@ -7,6 +7,7 @@ Make a GET call to the `/verifytoken` endpoint.
 
 ## Setup
 - `git clone` this library
+- Navigate to the root folder of the project
 - Restore dependencies with `npm install`
 - Run `npx nodemon` 
 - The server will be running on `http://localhost:9000/`
@@ -20,9 +21,15 @@ Should look like this:
 
 ![todo step 1](images/todo-step1.png)
 
-2. The server is expecting an authorisation header with a JWT. Get the jwt from `bit.ly/jwt-ex-1`
+2. The server is expecting an authorisation header with a JWT. Get the jwt from `bit.ly/jwt-ex-1` which is under the `Encoded` part
+
+Like this:
+![todo step 2](images/todo-step2.png)
 
 3. Copy the JWT and add a Authorisation header: Bearer {JWT} to your request
+
+Should look like this:
+![todo step 3](images/todo-step3.png)
 
 You should get the error: `Oops, you are NOT authorised to view this page because: invalid signature`
 
