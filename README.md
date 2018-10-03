@@ -7,18 +7,29 @@ Make a GET call to the `/verifytoken` endpoint.
 
 ## Setup
 - `git clone` this library
+- Navigate to the root folder of the project
 - Restore dependencies with `npm install`
 - Run `npx nodemon` 
 - The server will be running on `http://localhost:9000/`
 
 ## Todo
-1. Use Postman (https://www.getpostman.com/) to make a GET request http://localhost:9000/verifytoken
+1. Use Postman (https://www.getpostman.com/) tested with v6.3.0 to make a GET request http://localhost:9000/verifytoken
 
-You should get the error: `No authorisation header found.`
+You should get the error: `No Authorisation header with Bearer token found.`
 
-2. The server is expecting an authorisation header with a JWT. Get the jwt from `bit.ly/jwt-ex-1`
+Should look like this:
+
+![todo step 1](images/todo-step1.png)
+
+2. The server is expecting an authorisation header with a JWT. Get the jwt from `bit.ly/jwt-ex-1` which is under the `Encoded` part
+
+Like this:
+![todo step 2](images/todo-step2.png)
 
 3. Copy the JWT and add a Authorisation header: Bearer {JWT} to your request
+
+Should look like this:
+![todo step 3](images/todo-step3.png)
 
 You should get the error: `Oops, you are NOT authorised to view this page because: invalid signature`
 
@@ -43,9 +54,10 @@ In this exercise, you will generate and sign your own jwt locally using this lib
 ![Diagram of JWT as session token](./ex-2.png)
 
 ## Setup
-- `git clone` this library
+- `git clone` this library (if you have not already done so)
 
 #### Setup Ticketing Machine Server
+- Open a terminal in the root folder
 - Restore dependencies with `npm install`
 - Run `npx nodemon` to start the ticketing machine server
 - The ticketing machine will be running on `http://localhost:9000/`
@@ -75,7 +87,10 @@ Help fix the broken ticketing machine for an amusement park.
 
 2. Start ticketing server (http://localhost:9000) and visit http://localhost:3000 to view create ticket page
 
-3. Click Create Ticket’ to generate a ticket. You should be able to see your ticket generated.
+3. Click `Create Ticket` to generate a ticket. You should be able to see your ticket generated.
+
+Like this:
+![Create Ticket](./images/ex2-step3.png)
 
 #### 2b) Test out your Generated Token
 1. Test out your generated ticket against the amusement park gantry system (source at https://github.com/yuhong90/stack-jwt-demo-server). 
